@@ -37,3 +37,5 @@ app.post('/duration', async (req, res) => {
 });
 
 app.listen(3000);
+
+module.exports = app;
