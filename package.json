@@ -1,6 +1,12 @@
 {
   "dependencies": {
+    "@notionhq/client": "^2.2.15",
     "axios": "^1.7.7",
-    "fastify": "^5.0.0"
-  }
+    "express": "^4.21.1",
+    "fastify": "^5.0.0",
+    "get-mp3-duration": "^1.0.0",
+    "node-fetch": "^3.3.2"
+  },
+  "main": "index.mjs",
+  "type": "module"
 }
