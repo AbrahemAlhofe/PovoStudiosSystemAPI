@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 
-app.post('/duration/all', async (req, res) => {
+app.post('/api/duration/all', async (req, res) => {
   try {
     const { urls } = req.body;
     let durations = 0;
@@ -23,7 +23,7 @@ app.post('/duration/all', async (req, res) => {
   }
 });
 
-app.post('/duration', async (req, res) => {
+app.post('/api/duration', async (req, res) => {
   try {
     const url = req.body.url;
     const response = await fetch(url);
