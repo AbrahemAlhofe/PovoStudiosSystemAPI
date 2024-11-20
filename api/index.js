@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
-const express = require('express');
-const getMP3Duration = require('get-mp3-duration');
+import fetch from 'node-fetch';
+import express from 'express';
+import getMP3Duration from 'get-mp3-duration';
 
 const app = express();
 
@@ -36,4 +36,4 @@ app.post('/api/duration', async (req, res) => {
   }
 });
 
-module.exports = app;
+export default app;
