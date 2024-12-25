@@ -1,5 +1,5 @@
 import express from 'express';
-import { parseWebStream } from 'music-metadata';
+import { parseBuffer } from 'music-metadata';
 
 const app = express();
 
@@ -8,9 +8,10 @@ app.use(express.json());
 async function getAudioDurationInSeconds(url) {
 
   const response = await fetch(url);
+  const arrayBuffer = await response.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
   const mimeType = response.headers.get('content-type');
-  const webStream = response.body;
-  const metadata = await parseWebStream(webStream, mimeType);
+  const metadata = await parseBuffer(buffer, mimeType);
 
   return metadata.format.duration;
 
