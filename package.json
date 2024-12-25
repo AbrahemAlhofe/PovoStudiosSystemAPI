@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "@ffprobe-installer/ffprobe": "^2.1.2",
     "@notionhq/client": "^2.2.15",
     "axios": "^1.7.7",
+    "execa": "^9.5.2",
     "express": "^4.21.1",
     "fastify": "^5.0.0",
     "get-audio-duration": "^4.0.1",

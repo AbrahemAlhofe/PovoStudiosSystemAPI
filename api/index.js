@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAudioDurationInSeconds } from 'get-audio-duration';
+import { getAudioDurationInSeconds } from 'ffprobe/index.js';
 
 const app = express();
 
