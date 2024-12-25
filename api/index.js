@@ -8,8 +8,9 @@ app.use(express.json());
 async function getAudioDurationInSeconds(url) {
 
   const response = await fetch(url);
+  const mimeType = response.headers.get('content-type');
   const webStream = response.body;
-  const metadata = await parseWebStream(webStream);
+  const metadata = await parseWebStream(webStream, mimeType);
 
   return metadata.format.duration;
 
