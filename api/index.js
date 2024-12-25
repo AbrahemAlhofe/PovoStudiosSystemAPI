@@ -1,9 +1,19 @@
 import express from 'express';
-import { getAudioDurationInSeconds } from '../ffprobe/index.js';
+import { parseWebStream } from 'music-metadata';
 
 const app = express();
 
 app.use(express.json());
+
+async function getAudioDurationInSeconds(url) {
+
+  const response = await fetch(url);
+  const webStream = response.body;
+  const metadata = await parseWebStream(webStream);
+
+  return metadata.format.duration;
+
+}
 
 app.post('/api/duration/all', async (req, res) => {
   try {
@@ -15,7 +25,7 @@ app.post('/api/duration/all', async (req, res) => {
     }
     res.send({ durations });
   } catch (error) {
-    res.send({ durations: 0 });
+    res.send({ durations: 0, error: error.message });
   }
 });
 
