@@ -25,7 +25,7 @@ app.post('/api/duration', async (req, res) => {
     const duration = await getAudioDurationInSeconds(url)
     res.send({ duration });
   } catch (error) {
-    res.send({ duration: 0 });
+    res.send({ duration: 0, error: error.message });
   }
 });
 
