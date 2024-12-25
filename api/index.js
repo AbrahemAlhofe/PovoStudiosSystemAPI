@@ -1,6 +1,5 @@
-import fetch from 'node-fetch';
 import express from 'express';
-import getMP3Duration from 'get-mp3-duration';
+import { getAudioDurationInSeconds } from 'get-audio-duration';
 
 const app = express();
 
@@ -11,10 +10,7 @@ app.post('/api/duration/all', async (req, res) => {
     const { urls } = req.body;
     let durations = 0;
     for (let url of urls) {
-      const response = await fetch(url);
-      const arrayBuffer = await response.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const duration = getMP3Duration(buffer) / 1000
+      const duration = await getAudioDurationInSeconds(url)
       durations += duration;
     }
     res.send({ durations });
@@ -26,10 +22,7 @@ app.post('/api/duration/all', async (req, res) => {
 app.post('/api/duration', async (req, res) => {
   try {
     const url = req.body.url;
-    const response = await fetch(url);
-    const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const duration = await getMP3Duration(buffer) / 1000
+    const duration = await getAudioDurationInSeconds(url)
     res.send({ duration });
   } catch (error) {
     res.send({ duration: 0 });

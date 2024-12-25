@@ -4,6 +4,7 @@
     "axios": "^1.7.7",
     "express": "^4.21.1",
     "fastify": "^5.0.0",
+    "get-audio-duration": "^4.0.1",
     "get-mp3-duration": "^1.0.0",
     "node-fetch": "^3.3.2"
   },
