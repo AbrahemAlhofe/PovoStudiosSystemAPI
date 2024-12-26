@@ -6,15 +6,23 @@ const app = express();
 app.use(express.json());
 
 async function getAudioDurationInSeconds(url) {
+  const response = await fetch(url, { headers: { Range: 'bytes=0-65535' } });
+  
+  if (!response.ok && response.status !== 206) {
+    throw new Error(`Failed to fetch audio header from ${url}`);
+  }
 
-  const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   const mimeType = response.headers.get('content-type');
-  const metadata = await parseBuffer(buffer, mimeType);
 
-  return metadata.format.duration;
+  const metadata = await parseBuffer(buffer, mimeType, { duration: true });
 
+  const bitrate = metadata.format.bitrate;
+  const numberOfChannels = metadata.format.numberOfChannels;
+  const size = Number(response.headers.get("content-range").split("/")[1]);
+
+  return size * 8 / ( bitrate * numberOfChannels );
 }
 
 app.post('/api/duration/all', async (req, res) => {
