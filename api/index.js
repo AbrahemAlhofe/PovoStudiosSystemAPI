@@ -13,9 +13,16 @@ app.post('/api/duration/all', async (req, res) => {
       const { bitrate, numberOfChannels, duration, container, codecProfile, size } =  await readAudioHeader(url);
       const isMpegVbr = container === "MPEG" && codecProfile === "V2";
 
-      if ( container === "FLAC" || isMpegVbr ) durations += duration;
+      if ( container === "FLAC" || isMpegVbr ) { 
+        
+        durations += duration;
+
+      } else {
+        
+        durations += ( size * 8 ) / ( bitrate * numberOfChannels );
+
+      }
     
-      durations += ( size * 8 ) / ( bitrate * numberOfChannels );
     }
     res.send({ durations });
   } catch (error) {
