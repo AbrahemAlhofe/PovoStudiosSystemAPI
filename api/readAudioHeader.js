@@ -24,8 +24,8 @@ export default async function readAudioHeader(url) {
   const arrayBuffer = await response.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   const mimeType = response.headers.get('content-type');
-
   const metadata = await parseBuffer(buffer, mimeType, { duration: true });
+  const size = Number(response.headers.get("content-range").split("/")[1]);
 
   return {
     ...metadata.format,
