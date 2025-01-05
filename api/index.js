@@ -45,4 +45,15 @@ app.post('/api/bitrate', async (req, res) => {
   }
 });
 
+// api/channels
+app.post('/api/channels', async (req, res) => {
+  try {
+    const { url } = req.body;
+    const { numberOfChannels } = await readAudioHeader(url);
+    res.send({ channels: numberOfChannels });
+  } catch (error) {
+    res.send({ channels: 0, error: error.message });
+  }
+});
+
 export default app;
