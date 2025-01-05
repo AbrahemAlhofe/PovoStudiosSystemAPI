@@ -1,5 +1,5 @@
 import express from 'express';
-import getAudioDurationInSeconds from './getAudioDurationInSeconds.js';
+import readAudioHeader from './readAudioHeader.js';
 
 const app = express();
 
@@ -10,8 +10,12 @@ app.post('/api/duration/all', async (req, res) => {
     const { urls } = req.body;
     let durations = 0;
     for (let url of urls) {
-      const duration = await getAudioDurationInSeconds(url)
-      durations += duration;
+      const { bitrate, numberOfChannels, duration, container, codecProfile, size } =  await readAudioHeader(url);
+      const isMpegVbr = container === "MPEG" && codecProfile === "V2";
+      
+      if ( container === "FLAC" || isMpegVbr ) durations += duration;
+    
+      durations += ( size * 8 ) / ( bitrate * numberOfChannels );
     }
     res.send({ durations });
   } catch (error) {
@@ -19,13 +23,25 @@ app.post('/api/duration/all', async (req, res) => {
   }
 });
 
-app.post('/api/duration', async (req, res) => {
+// api/sample-rate/
+app.post('/api/sample-rate', async (req, res) => {
   try {
-    const url = req.body.url;
-    const duration = await getAudioDurationInSeconds(url)
-    res.send({ duration });
+    const { url } = req.body;
+    const { sampleRate } = await readAudioHeader(url);
+    res.send({ sampleRate });
   } catch (error) {
-    res.send({ duration: 0, error: error.message });
+    res.send({ sampleRate: 0, error: error.message });
+  }
+});
+
+// api/bitrate/
+app.post('/api/bitrate', async (req, res) => {
+  try {
+    const { url } = req.body;
+    const { bitrate } = await readAudioHeader(url);
+    res.send({ bitrate });
+  } catch (error) {
+    res.send({ bitrate: 0, error: error.message });
   }
 });
 
