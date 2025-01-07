@@ -52,4 +52,11 @@ describe('getAudioDurationInSeconds', () => {
     expect(Math.floor(duration)).toBe(expectedDuration);
   });
 
+  
+  it('should return the correct duration for the sixth URL (5:48)', async () => {
+    const url = 'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3';
+    const expectedDuration = 350; // 5:48 in seconds
+    const duration = await getAudioDurationInSeconds(url);
+    expect(Math.floor(duration)).toBe(expectedDuration);
+  });
 });

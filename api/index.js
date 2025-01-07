@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 
-app.post('/api/duration/all', async (req, res) => {
+app.post('/api/duration', async (req, res) => {
   try {
     const { urls } = req.body;
     let durations = 0;
