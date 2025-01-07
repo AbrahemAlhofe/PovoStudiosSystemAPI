@@ -1,16 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import readAudioHeader from './api/readAudioHeader.js';
-
-async function getAudioDurationInSeconds(url) {
-        
-  const { bitrate, numberOfChannels, duration, container, codecProfile, size } =  await readAudioHeader(url);
-  const isMpegVbr = container === "MPEG" && codecProfile === "V2";
-  
-  if ( container === "FLAC" || isMpegVbr ) return duration;
-      
-  return ( size * 8 ) / ( bitrate * numberOfChannels );
-
-}
+import getAudioDurationInSeconds from './api/getAudioDurationInSeconds';
 
 describe('getAudioDurationInSeconds', () => {
   it('should return the correct duration for FLAC (2:24)', async () => {
@@ -41,9 +30,24 @@ describe('getAudioDurationInSeconds', () => {
     expect(Math.floor(duration)).toBe(expectedDuration);
   });
 
-  it('should return the correct duration for the fourth URL (3:12)', async () => {
+  it('should return the correct duration for the fifth URL (3:12)', async () => {
     const url = 'https://codahosted.io/docs/ukq18oL8TI/blobs/bl-fQRU6Ye5eS/e86a2ee6f90990eb5d5042ab95f628d9855cee7bfc0b84a1b212c32c51f2e4f484e437885452875131ab417a8ed21a5a4153ceaccaf1a173993cc3d2a84f5c2688044fe4ae9fac0503c40f11555a58184ee1f3b9e4b7ffd62005d2e792e21f6e20eac8a5?codaUse=preview';
     const expectedDuration = 192; // 2:24 in seconds
+    const duration = await getAudioDurationInSeconds(url);
+    expect(Math.floor(duration)).toBe(expectedDuration);
+  });
+
+  it('should return the correct duration for the sixth URL (5:01)', async () => {
+    const url = 'https://diviextended.com/wp-content/uploads/2021/10/sound-of-waves-marine-drive-mumbai.mp3';
+    const expectedDuration = 301; // 5:01 in seconds
+    const duration = await getAudioDurationInSeconds(url);
+    expect(Math.floor(duration)).toBe(expectedDuration);
+  });
+
+
+  it('should return the correct duration for the sixth URL (00:27)', async () => {
+    const url = 'https://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs/thrust.mp3';
+    const expectedDuration = 27; // 00:27 in seconds
     const duration = await getAudioDurationInSeconds(url);
     expect(Math.floor(duration)).toBe(expectedDuration);
   });

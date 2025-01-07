@@ -1,5 +1,6 @@
 import express from 'express';
 import readAudioHeader from './readAudioHeader.js';
+import getAudioDurationInSeconds from './getAudioDurationInSeconds.js';
 
 const app = express();
 
@@ -9,21 +10,7 @@ app.post('/api/duration/all', async (req, res) => {
   try {
     const { urls } = req.body;
     let durations = 0;
-    for (let url of urls) {
-      const { bitrate, numberOfChannels, duration, container, codecProfile, size } =  await readAudioHeader(url);
-      const isMpegVbr = container === "MPEG" && codecProfile === "V2";
-
-      if ( container === "FLAC" || isMpegVbr ) { 
-        
-        durations += duration;
-
-      } else {
-        
-        durations += ( size * 8 ) / ( bitrate * numberOfChannels );
-
-      }
-    
-    }
+    for (let url of urls) durations += await getAudioDurationInSeconds(url);
     res.send({ durations });
   } catch (error) {
     res.send({ durations: 0, error: error.message });
